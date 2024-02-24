@@ -5,7 +5,7 @@ import (
   "fmt"
   "log"
   "google.golang.org/grpc"
-  "grpc/grpc"
+  "github.com/Plastic-VR-sync-server/api"
 )
 type server struct{}
 
