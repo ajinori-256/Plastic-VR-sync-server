@@ -9,7 +9,6 @@ import (
 
 type Room struct {
 	ClientChan chan Subscriber
-	ServerChan chan grpc.ServerMessage
 	Data       grpc.Room
 }
 
@@ -26,7 +25,7 @@ func CreateRoom(createRoomRequest *grpc.CreateRoomRequest, playerData *grpc.Play
 	if err != nil {
 		log.Printf("Error %v\n", err)
 		return &grpc.CreateRoomResponse{
-			Error: &grpc.Error{Code:grpc.ErrorCode_INTERNAL_SERVER_ERROR,Message: grpc.ErrorCode_INTERNAL_SERVER_ERROR.String(),}
+			Error: &grpc.Error{Code:grpc.ErrorCode_INTERNAL_SERVER_ERROR,Message: grpc.ErrorCode_INTERNAL_SERVER_ERROR.String(),},
 		}
 	}
 	room.Data.RoomId = room_id.String()
@@ -42,3 +41,5 @@ func CreateRoom(createRoomRequest *grpc.CreateRoomRequest, playerData *grpc.Play
 		},
 	}
 }
+
+func 
