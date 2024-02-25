@@ -13,7 +13,8 @@ message ClientMessage {
     CreateRoomRequest create_room_request = 2;
     JoinRoomRequest join_room_request = 3;
     LeaveRoomRequest leave_room_request = 4;
-    PlayerDataRequest player_data_request = 5;
+    PlayerDataPush player_data_push = 5;
+    ServerDataPushResponse server_data_push_response = 6;
   }
 }
 message ServerMessage {
@@ -24,7 +25,8 @@ message ServerMessage {
     JoinRoomNotification join_room_notification = 4;
     LeaveRoomResponse leave_room_response = 5;
     LeaveRoomNotification leave_room_notification = 6;
-    PlayerDataResponse player_data_response = 7;
+    PlayerDataPushResponse player_data_push_response = 7;
+    ServerDataPush server_data_push = 8;
   }
 }
 
@@ -48,8 +50,7 @@ message JoinRoomRequest {
 }
 message JoinRoomResponse {
   string room_id = 1;
-  repeated PlayerData player_data = 2;
-  Error error =3;
+  Error error =2;
 }
 
 message RoomConfig {
@@ -61,7 +62,6 @@ message JoinRoomNotification {
   string room_id = 1;
   string player_id = 2;
   PlayerData player_data = 3;
-
 }
 
 message LeaveRoomRequest {
@@ -78,24 +78,35 @@ message LeaveRoomNotification{
   string player_id = 2;
 }
 
-message ServerNotification{
+message ServerNotifycation{
 //place holder
 }
 
-message PlayerDataRequest{
+message PlayerDataPush{
   string room_id = 1;
   PlayerData data = 2;
 }
-
-message PlayerDataResponse{
-  repeated PlayerData data=1;
-  Error error = 2;
+message PlayerDataPushResponse{
+  Error error = 1;
+}
+message ServerDataPush{
+  map<string, PlayerData> data = 1;
+}
+message ServerDataPushResponse{
+  
 }
 message PlayerData{
   string room_id = 1;
   string player_id = 2;
-  Transform  player_transform = 3;
+  Transform  transform = 3;
   string avater_url = 4;
+}
+
+message Room{
+string room_id = 1;
+string room_owner = 2;
+RoomConfig room_config = 3;
+repeated string player_id =4 ;
 }
 message Error {
   ErrorCode code = 1;
@@ -104,9 +115,10 @@ message Error {
 
 enum ErrorCode {
   NONE =0;
-  UNAUTHORIZED = 1;
-  ROOM_IS_FULL =2;
-  NO_PERMISSION  =3;
+  INTERNAL_SERVER_ERROR = 1;
+  UNAUTHORIZED = 2;
+  ROOM_IS_FULL =3;
+  NO_PERMISSION  =4;
 }
 message Transform {
 Vec3 positon = 1;
